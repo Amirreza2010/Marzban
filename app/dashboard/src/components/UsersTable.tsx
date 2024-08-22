@@ -229,11 +229,23 @@ export const UsersTable: FC<UsersTableProps> = (props) => {
       sort: newSort,
     });
   };
-  const handleStatusFilter = (e: any) => {
-    onFilterChange({
-      status: e.target.value.length > 0 ? e.target.value : undefined,
+  const handleStatusFilter = (event) => {
+    const status = event.target.value;
+  
+    if (status === "online") {
+      // فیلتر برای نمایش فقط کاربران آنلاین
+      setUsers(allUsers.filter(user => user.isOnline));
+    } else {
+      // فیلتر برای سایر وضعیت‌ها
+      setUsers(allUsers.filter(user => user.status === status));
+    }
+  
+    setFilters({
+      ...filters,
+      status: status,
     });
   };
+  
 
   const toggleAccordion = (index: number) => {
     setSelectedRow(index === selectedRow ? undefined : index);
@@ -311,6 +323,7 @@ export const UsersTable: FC<UsersTableProps> = (props) => {
                     <option>disabled</option>
                     <option>limited</option>
                     <option>expired</option>
+                    <option>online</option>
                   </Select>
                 </HStack>
               </Th>
@@ -555,6 +568,7 @@ export const UsersTable: FC<UsersTableProps> = (props) => {
                   <option>disabled</option>
                   <option>limited</option>
                   <option>expired</option>
+                  <option>online</option>
                 </Select>
               </HStack>
             </Th>
